@@ -1,0 +1,437 @@
+Data Scientist Role Play: Profiling and Analyzing the Yelp Dataset Coursera Worksheet
+
+This is a 2-part assignment. In the first part, you are asked a series of questions that will help you profile and understand the data just like a data scientist would. For this first part of the assignment, you will be assessed both on the correctness of your findings, as well as the code you used to arrive at your answer. You will be graded on how easy your code is to read, so remember to use proper formatting and comments where necessary.
+
+In the second part of the assignment, you are asked to come up with your own inferences and analysis of the data for a particular research question you want to answer. You will be required to prepare the dataset for the analysis you choose to do. As with the first part, you will be graded, in part, on how easy your code is to read, so use proper formatting and comments to illustrate and communicate your intent as required.
+
+For both parts of this assignment, use this "worksheet." It provides all the questions you are being asked, and your job will be to transfer your answers and SQL coding where indicated into this worksheet so that your peers can review your work. You should be able to use any Text Editor (Windows Notepad, Apple TextEdit, Notepad ++, Sublime Text, etc.) to copy and paste your answers. If you are going to use Word or some other page layout application, just be careful to make sure your answers and code are lined appropriately.
+In this case, you may want to save as a PDF to ensure your formatting remains intact for you reviewer.
+
+
+
+Part 1: Yelp Dataset Profiling and Understanding
+
+1. Profile the data by finding the total number of records for each of the tables below:
+	
+i. Attribute table = 10000
+ii. Business table = 10000
+iii. Category table = 10000
+iv. Checkin table = 10000
+v. elite_years table = 10000
+vi. friend table = 10000
+vii. hours table = 10000
+viii. photo table = 10000
+ix. review table = 10000
+x. tip table = 10000
+xi. user table = 10000
+	
+
+
+2. Find the total distinct records by either the foreign key or primary key for each table. If two foreign keys are listed in the table, please specify which foreign key.
+
+i. Business = id-10000
+ii. Hours = business_id-1562
+iii. Category = business_id -2643 
+iv. Attribute = business_id - 1115
+v. Review = id - 10000
+vi. Checkin = business_id - 493
+vii. Photo = id - 10000, business_id - 6493
+viii. Tip = user_id - 537, business_id - 3979
+ix. User = id - 10000
+x. Friend = user_id - 11
+xi. Elite_years = user_id - 2780
+
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
+
+
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer: NO
+	
+	SQL code used to arrive at answer:
+	
+		SELECT COUNT(*)
+		FROM user
+		WHERE id IS NULL
+				OR name IS NULL
+				OR review_count IS NULL
+				OR yelping_since IS NULL
+				OR useful IS NULL
+				OR funny IS NULL
+				OR cool IS NULL
+				OR fans IS NULL
+				OR average_stars IS NULL 
+				OR compliment_hot IS NULL
+				OR compliment_more IS NULL
+				OR compliment_profile IS NULL
+				OR compliment_cute IS NULL
+				OR compliment_list IS NULL
+				OR compliment_note IS NULL
+				OR compliment_cool IS NULL
+				OR compliment_funny IS NULL
+				OR compliment_writer IS NULL
+				OR compliment_photos IS NULL
+		;
+	
+
+	
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+	i. Table: Review, Column: Stars
+	
+		min: 1		max:5		avg:3.7082
+		
+	
+	ii. Table: Business, Column: Stars
+	
+		min:1.0		max:5.0		avg:3.6549
+		
+	
+	iii. Table: Tip, Column: Likes
+	
+		min:0		max:2		avg:0.0144 
+		
+	
+	iv. Table: Checkin, Column: Count
+	
+		min:1		max:53		avg:1.9414
+		
+	
+	v. Table: User, Column: Review_count
+	
+		min:0		max:2000		avg:24.2995
+		
+
+
+5. List the cities with the most reviews in descending order:
+
+	SQL code used to arrive at answer:
+		SELECT city, SUM(review_count) as sum_review
+		FROM business
+		GROUP BY city
+		ORDER BY sum_review DESC
+	
+	Copy and Paste the Result Below:
+		+-----------------+------------+
+		| city            | sum_review |
+		+-----------------+------------+
+		| Las Vegas       |      82854 |
+		| Phoenix         |      34503 |
+		| Toronto         |      24113 |
+		| Scottsdale      |      20614 |
+		| Charlotte       |      12523 |
+		| Henderson       |      10871 |
+		| Tempe           |      10504 |
+		| Pittsburgh      |       9798 |
+		| Montréal        |       9448 |
+		| Chandler        |       8112 |
+		| Mesa            |       6875 |
+		| Gilbert         |       6380 |
+		| Cleveland       |       5593 |
+		| Madison         |       5265 |
+		| Glendale        |       4406 |
+		| Mississauga     |       3814 |
+		| Edinburgh       |       2792 |
+		| Peoria          |       2624 |
+		| North Las Vegas |       2438 |
+		| Markham         |       2352 |
+		| Champaign       |       2029 |
+		| Stuttgart       |       1849 |
+		| Surprise        |       1520 |
+		| Lakewood        |       1465 |
+		| Goodyear        |       1155 |
+		+-----------------+------------+
+		(Output limit exceeded, 25 of 362 total rows shown)
+
+	
+6. Find the distribution of star ratings to the business in the following cities:
+
+i. Avon
+
+SQL code used to arrive at answer:
+		SELECT stars, sum(review_count) AS sum_review
+		FROM business
+		WHERE city = 'Avon'
+		GROUP by stars
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
+		+-------+------------+
+		| stars | sum_review |
+		+-------+------------+
+		|   1.5 |         10 |
+		|   2.5 |          6 |
+		|   3.5 |         88 |
+		|   4.0 |         21 |
+		|   4.5 |         31 |
+		|   5.0 |          3 |
+		+-------+------------+
+
+ii. Beachwood
+
+SQL code used to arrive at answer:
+		SELECT stars, sum(review_count) AS sum_review
+		FROM business
+		WHERE city = 'Beachwood'
+		GROUP by stars
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
+		+-------+------------+
+		| stars | sum_review |
+		+-------+------------+
+		|   2.0 |          8 |
+		|   2.5 |          3 |
+		|   3.0 |         11 |
+		|   3.5 |          6 |
+		|   4.0 |         69 |
+		|   4.5 |         17 |
+		|   5.0 |         23 |
+		+-------+------------+
+
+
+7. Find the top 3 users based on their total number of reviews:
+		
+	SQL code used to arrive at answer:
+		SELECT name, review_count
+		FROM user
+		ORDER BY review_count DESC
+		LIMIT 3
+		
+	Copy and Paste the Result Below:
+		+--------+--------------+
+		| name   | review_count |
+		+--------+--------------+
+		| Gerald |         2000 |
+		| Sara   |         1629 |
+		| Yuri   |         1339 |
+		+--------+--------------+
+
+
+8. Does posing more reviews correlate with more fans?
+
+	Yes. The more reviews gets the more fans. Time of yelping and the number of reviews correlate to the higher fan count. 
+
+	Please explain your findings and interpretation of the results:
+	
+			SELECT name,
+				review_count,
+				fans,
+				yelping_since
+			FROM user
+			ORDER BY review_count DESC
+
+			+-----------+--------------+------+---------------------+
+			| name      | review_count | fans | yelping_since       |
+			+-----------+--------------+------+---------------------+
+			| Gerald    |         2000 |  253 | 2012-12-16 00:00:00 |
+			| Sara      |         1629 |   50 | 2010-05-16 00:00:00 |
+			| Yuri      |         1339 |   76 | 2008-01-03 00:00:00 |
+			| .Hon      |         1246 |  101 | 2006-07-19 00:00:00 |
+			| William   |         1215 |  126 | 2015-02-19 00:00:00 |
+			| Harald    |         1153 |  311 | 2012-11-27 00:00:00 |
+			| eric      |         1116 |   16 | 2007-05-27 00:00:00 |
+			| Roanna    |         1039 |  104 | 2006-03-28 00:00:00 |
+			| Mimi      |          968 |  497 | 2011-03-30 00:00:00 |
+			| Christine |          930 |  173 | 2009-07-08 00:00:00 |
+			| Ed        |          904 |   38 | 2009-08-10 00:00:00 |
+			| Nicole    |          864 |   43 | 2006-08-02 00:00:00 |
+			| Fran      |          862 |  124 | 2012-04-05 00:00:00 |
+			| Mark      |          861 |  115 | 2009-05-31 00:00:00 |
+			| Christina |          842 |   85 | 2012-10-08 00:00:00 |
+			| Dominic   |          836 |   37 | 2011-02-06 00:00:00 |
+			| Lissa     |          834 |  120 | 2007-08-14 00:00:00 |
+			| Lisa      |          813 |  159 | 2009-10-05 00:00:00 |
+			| Alison    |          775 |   61 | 2007-07-02 00:00:00 |
+			| Sui       |          754 |   78 | 2009-09-07 00:00:00 |
+			| Tim       |          702 |   35 | 2009-01-21 00:00:00 |
+			| L         |          696 |   10 | 2010-04-29 00:00:00 |
+			| Angela    |          694 |  101 | 2010-10-01 00:00:00 |
+			| Crissy    |          676 |   25 | 2008-07-31 00:00:00 |
+			| Lyn       |          675 |   45 | 2009-11-07 00:00:00 |
+			+-----------+--------------+------+---------------------+
+			(Output limit exceeded, 25 of 10000 total rows shown)
+	
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+	Answer: Reviews with the word love has 1780 while with the word hate count as 232 only. More reviews with the word love than hate. 
+
+	
+	SQL code used to arrive at answer:
+	
+	SELECT COUNT (*)
+	FROM review
+	WHERE text like '%love%';
+	
+	= 1780
+
+	SELECT COUNT (*)
+	FROM review
+	WHERE text like '%hate%';
+	
+	hate = 232
+	
+10. Find the top 10 users with the most fans:
+
+	SQL code used to arrive at answer:
+		SELECT name, fans
+		FROM user
+		ORDER BY fans DESC
+		LIMIT 10
+	
+	
+	Copy and Paste the Result Below:
+		+-----------+------+
+		| name      | fans |
+		+-----------+------+
+		| Amy       |  503 |
+		| Mimi      |  497 |
+		| Harald    |  311 |
+		| Gerald    |  253 |
+		| Christine |  173 |
+		| Lisa      |  159 |
+		| Cat       |  133 |
+		| William   |  126 |
+		| Fran      |  124 |
+		| Lissa     |  120 |
+		+-----------+------+
+	
+		
+
+Part 2: Inferences and Analysis
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+	
+i. Do the two groups you chose to analyze have a different distribution of hours?
+
+Yes, they mostly open around lunch time and with one restaurant opens around dinner. One restaurant close before dinner and the rest close at 11 pm.   
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+
+The difference is not that noticeable as the two extreme number of review of restaurants got the lower number of reviews. While those at the middle got more reviews. 
+
+
+         
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+People in Toronto tend to have extreme opinion on Japanese style dishes while western style meals tend to accomodate thier taste. 
+
+SQL code used for analysis:
+
+SELECT 
+		b.name,
+		b.city,
+		c.category,
+		h.hours,
+		b.review_count,
+		CASE
+			WHEN B.stars BETWEEN 2 AND 3 THEN '2-3 stars'
+			WHEN B.stars BETWEEN 4 AND 5 THEN '4-5 stars'
+		END AS star_rating
+FROM (business AS b INNER JOIN category AS c ON b.id = c.business_id)
+INNER JOIN hours AS h ON h.business_id = b.id
+WHERE b.city = 'Toronto'
+AND c.category LIKE '%Restaurants%'
+GROUP BY b.stars
+		
+		
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+		
+i. Difference 1:
+
+By average, businesses which are open tend to have more reviews than the close ones. 
+		
+			Open:   avg_review_count = 31.757
+			Closed: avg_review_count = 23.198
+			
+ii. Difference 2:
+Those businesses which are open tend to have more stars than those which are closed 
+	
+			Open:   avg_star = 3.679
+			Closed: avg_star = 3.520
+         
+         
+SQL code used for analysis:
+SELECT AVG(review_count) AS avg_review_count, AVG(stars) AS avg_star, is_open
+FROM business
+GROUP BY is_open
+	
+	
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
+	
+i. Indicate the type of analysis you chose to do:
+		Finding commonalities of business establishments that is either open or close to predict factors that contributed to thier  by examining the sentiments and reviews of the customers. 
+         
+         
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+			Common sentiments of customers will help businesses enhance their services to avoid closures in the future and insure their business will stay open. 
+		The data to be considered will be from both those business which already closed and stay open to have a glimpse on what contributed to their failure or success.
+			Data to be considered in this analysis will be name, city, stars, whether its open or not, and the comments of the customers. 
+		With this data, we would be able to see patterns among businesses that lead to their closures or what makes them still open as of the moment. 
+                  
+iii. Output of your finished dataset:
+
++------------------------+----------------------------------------------------+------------+-------+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| id                     | name                                               | city       | stars | is_open | text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
++------------------------+----------------------------------------------------+------------+-------+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| --9e1ONYQuAa-CB_Rrw7Tw | Delmonico Steakhouse                               | Las Vegas  |   4.0 |       1 | My client took me here after the MAGIC Show and it was phenomenal! The steak danced in my mouth. Well not really but you get the picture. The salads and sides (asparagus, potatoes) were excellent. They also have a fine wine selection. This place takes steak on another level! Highly recommended!                                                                                                                                                                                                                                                                                          |
+| --cZ6Hhc9F7VkKXxHMVZSQ | Pio Pio                                            | Charlotte  |   4.0 |       1 | The chicken is awesome! Specially, for the price. Service is quick.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | Update: Didn't have the same great experience on follow-up visits. Still, it's a good place for good chicken.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -050d_XIor1NpCuWkbIVaQ | Matt's Big Breakfast                               | Phoenix    |   4.0 |       0 | This place is awesome!!!  I am a die-hard fan of Robert's in Tucson but this is the first place that gives them a run for their money.  Homemade thick slabs of bread served with fresh strawberry jam and an egg scramble with spinach and havarti = breakfast heaven.  This place is tiny and I'm sure gets packed as we went on a Tuesday morning and there was a small wait but it's so worth it!                                                                                                                                                                                            |
+| -0NrB58jqKqJfuUCDupcsw | The Fry                                            | North York |   3.5 |       1 | Couldn't get a table. They wouldn't give us a table for 6. They wouldn't even try.  We would have waited. Stupid.  Only 1 person working the entire place. Stupid again. I don't like giving my business to people who could care less about mine. If you feel the same then avoid this place.                                                                                                                                                                                                                                                                                                   |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | We went next door to Ha Ba Tang and had a good time.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | If I could have got a table in would have been happy to leave a real review.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| -0tgMGl7D9B10YjSN2ujLA | Dubliner                                           | Phoenix    |   3.5 |       1 | This place can get really awesome or really dull dependent on one solitary man resembling a leprechaun with a filthy mouth and penchant for calling out mouthy toolbags, all while playing the guitar and happily caroling away in Irish drinking hymnals.  It can get really crowded, which makes standing really tedious and plants a target on your big forehead for the leprechaun to abuse.  On St. Paddy's Day, this place is chaos, and like most other forced holidays is not worth getting into the carnival atmosphere just to say you did it.  Cash-only holidays get old in a hurry. |
+| -1UMR00eXtwaeh59pEiDjA | Matt's Big Breakfast                               | Phoenix    |   3.5 |       1 | Every other restaraunt in an airport will get you your food before 30 minutes,  it's not even busy, wtf.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| -1xuC540Nycht_iWFeJ-dw | Romados                                            | Montréal   |   4.5 |       1 | There is usually a line but they process very quickly.  We tried the spicy chicken and it was kind of dry.  They give a lot of french fries so we didn't need to order two entrees with fries but instead ordered one entree with fries and added additional chicken pieces and it was enough to feed three of us.  It's a cheap meal located in a residential neighborhood.  Definitely off the beaten path for us tourist.  The nata was ok.  It would have tasted better if they served it warm or at least at room temp.                                                                     |
+| -2TKoFglMQvSmHSNWf6S8Q | U.S. Bank                                          | Scottsdale |   4.0 |       1 | Years ago, I banked here. They were horrible. These days the only reason I come here is to make my mortgage payment. Saturday morning, I was the only one in line. For 10 minutes while a teller conversed with a customer about their grandkids. I get it you want to connect with your customers. Another person working the drive thru  came to the front where I thought he would help me. No such luck. Finally, a woman from the back came out and asked if I had a check deposit or a payment. She finally took my payment. One more reason to hate the big banks.                        |
+| -2uhc4spgMqJMy0YSxConA | Alamo Rent A Car                                   | Mesa       |   4.0 |       1 | Rented a van in the Mesa, AZ area.  We had an issue with a cracked window.  It wasn't apparent when we picked the car up but by the time we returned the vehicle days later the crack was over 12 inches long.  I explained the situation and Alamo did not charge us anything which we really appreciate!!!  It wasn't our fault to begin with but I don't think all companies would have believed us!  So Thanks Alamo!                                                                                                                                                                        |
+| -38Kck4mGlkBwd6OXayZRg | Now and Zen Massage Therapy                        | Las Vegas  |   5.0 |       1 | Seriously the best massage I've ever had! Ariana and David are so caring and skilled! The pressure was perfect, the scents were great, the ambiance was fantastic! All in the comfort of our hotel room.  If you need (WANT) a massage this is definitely the place to get it from!                                                                                                                                                                                                                                                                                                              |
+| -3QHAylnVB-vNmCg2Rf5aw | I'm Board! Games & Family Fun                      | Middleton  |   5.0 |       1 | Great friendly local game store! Huge selection of board games along with good sections for role-playing and miniatures games. The staff are very knowledgeable and the gaming area in the back is comfortable and clean. The whole place is very welcoming. Madison has a number of game stores, but I'm Board is exceptional.                                                                                                                                                                                                                                                                  |
+| -3zffZUHoY8bQjGfPSoBKQ | Michael Mina                                       | Las Vegas  |   4.0 |       1 | Classy establishment all around. The hotel it is in is the Bellagio. The service from the moment you walk in is what you expect from a nice restaurant.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | There were seven of us for dinner on a Tuesday and the place was jam packed. The service wasn't impacted at all. Everyone who touched the table had a touch of class mixed with a sense of humor.                                                                                                                                                                                                                                                                                                                                                                                                |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | Our part ordered almost every entree on the menu with everyone raving. A few of us split the lobster pot pie. If you order it, definitely split it. Half an order was plenty. It is creamy which they warn/tell you about ahead of time.                                                                                                                                                                                                                                                                                                                                                         |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | The wine list is exhaustive and if you are the one picking the wine will make you anti-social for about 10-15 minutes while you choose.                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | Would definitely go again.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| -5L8zOxibac-vBrsYtxXbQ | Ed's Tavern                                        | Charlotte  |   3.5 |       1 | WOW! This place was exceptional, not only because every meal we enjoyed had a variety of options and was flavorful but also because the prices were so reasonable! I would definitely recommend Shae as your waitress. She is AWESOME! You can definitely expect a good time and great service. Sometimes, to my delight, the experience exceeds my expectations! I highly recommend anyone paying Eds a visit!                                                                                                                                                                                  |
+| -5NXoZeGBdx3Bdk70tuyCw | Po' Boys Restaurant                                | Urbana     |   4.0 |       1 | Great crispy crust on my individual pizza.  We went for lunch and our waitress kept in mind that we were on a tight schedule.  Husband thought his sandwich was ok, priced right but nothing special.  The hit of this place, as many have said, is the homemade pies!  Save room for a slice, very tasty!  Can't think of another place in town with homemade pies like these.                                                                                                                                                                                                                  |
+| -5TBEK1ddM41v_gqGm5oyw | Torontoism - Sotheby's International Realty Canada | Toronto    |   5.0 |       1 | Richard helped my mom sell our North Toronto home several years back, and she was very, very happy with the job he did.  Richard's a lovely man, totally professional, and really knows what he's doing.                                                                                                                                                                                                                                                                                                                                                                                         |
+| -6tvduBzjLI1ISfs3F_qTg | Joyride Taco House                                 | Gilbert    |   4.0 |       1 | Great food, nice atmosphere, great location.  The tacos are good, I had one of each, very unique!  The Beast burrito is my favorite! The ceviche was tasty, but almost too chunky so it was hard to scoop on a chip. No televisions, so that can be good or bad depending on if you want to watch a game while eating.                                                                                                                                                                                                                                                                           |
+| -7H-oXvCxJzuT42ky6Db0g | Industry Public House                              | Pittsburgh |   3.5 |       1 | Came here on a Sunday for lunch. We ordered the candied bacon, pot roast fries, a president salad (which was just a chicken Caesar salad) and the model turkey sandwich. Candied bacon was good, I liked the flavor a lot, not too sweet. The fries were very good as well - they gave a generous portion of the pot roast. The two main meals were ok.                                                                                                                                                                                                                                          |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | Overall not bad. I would like to come here for a drink at night thou                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -7PX_FOoCwktlunImRyZdg | Pizza Taglio                                       | Pittsburgh |   4.0 |       1 | I've been there twice so far probably the best gourmet style pizza place in Pittsburgh. There was not a lot of seating in the restaurant however it seems like there was enough room to add at least 5 more tables. I feel like they are not utilizing the space to its fullist potential.                                                                                                                                                                                                                                                                                                       |
+| -82Z0wTA-nOCLUVD4XXIBA | Liberty Nails                                      | Tempe      |   3.0 |       1 | Avoid at all costs. I think their name is now XO Nails. They were unprofessional, dirty and in then end I am not happy. Should of left before they started.                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| -8O8sVCnaIKHP-596zN9UA | Blue Canyon                                        | Twinsburg  |   3.5 |       1 | Not good. It's like some new culinary school grad planned the menu. Just a mishmash of good ingredients ruined by poor creativty. I mean, they screwed up the bread and butter! Why not just give out some fresh simple rolls and fresh butter instead of the tough (not crusty)  sun dried tomato and herb roll with garlic and pine nut butter. Poor texture on top of too many flavors that didn't really match up well. Yuck!  And that was just the bread.                                                                                                                                  |
+|                        |                                                    |            |       |         |        I had the lobster linguini. Here's a thought: Why not let the lobster be the star? Why feel like you have to botch it up with a ridiculous grainy and viscous  lemongrass sauce?  It was poor.                                                                                                                                                                                                                                                                                                                                                                                            |
+|                        |                                                    |            |       |         |         While not "terrible" the fact that they charge so much for this nonsense gets them one star. You deserve better Ohio. This is mediocre fare trying to pass itself of as fine dining by using a very pretty setting and long descriptions with a lot of fancy sounding ingredients and then charging a lot for it.                                                                                                                                                                                                                                                                        |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | Oh, and on a side note, if Im paying 30 bucks for a plate of food, maybe the waitress shouldn't be calling me "honey" everytime we interact. They do that at diners.                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -8QlV3b_9H4BAh6LgMIr1g | Nandini Indian Cuisine                             | Tempe      |   4.5 |       1 | This was our second, but certainly not our last, visit to Nandini's. We ordered lamb biryani and lamb korma. Both were perfectly spiced and seasoned. The lamb was fork tender. Don't forget to order the naan - garlic and regular. Large portions and loved the leftovers. Oh! Did we mention the mango lassi?                                                                                                                                                                                                                                                                                 |
+| -8ZiMXZReeTD3kwEvS0Lww | The Butcher Block                                  | Las Vegas  |   4.5 |       1 | High quality meat and the prices are reasonable.  I love buying ribs and steak there for special occasions.  They have a huge selection of fresh and frozen meats.  I love shopping here, but always spend more than I want;  I can't stop buying food that looks great!                                                                                                                                                                                                                                                                                                                         |
+| -92cC6-X87HQ1DE1UHOx3w | Junior                                             | Montréal   |   3.5 |       1 | Got a confirmed reservation through email for last night but then when my friends and I showed up, we were flat out told you don't offer reservations. Not cool.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| -95mbLJsa0CxXhpaNL4LvA | The Perfect Scoop & Boba Tea                       | Las Vegas  |   3.5 |       1 | Love this place.  The owner (we're pretty sure he was the owner) was really friendly and offered us endless samples of the different flavors of ice cream.  They had some exotic flavors - thai tea, black sesame, taro and well as the usual strawberry, etc.  He told us that all the ice cream is made on site and they even have dairy free ice cream.                                                                                                                                                                                                                                       |
+|                        |                                                    |            |       |         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|                        |                                                    |            |       |         | We ordered macaroon ice cream sandwiches and they are definitely big enough to share.  You can choose the type of macaroon and ice cream flavor.  Wish we had a place like this in SF.  Will definitely be back when we're in Vegas.                                                                                                                                                                                                                                                                                                                                                             |
+| -9YyInW1wapzdNZrhQJ9dg | Fresh Buffet                                       | Las Vegas  |   2.5 |       1 | For a buffet it is great. Pricing wasn't horrible, selection was better than average, cashiers, hostesses and waitstaff were pleasant and attentive.                                                                                                                                                                                                                                                                                                                                                                                                                                             |
++------------------------+----------------------------------------------------+------------+-------+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+(Output limit exceeded, 25 of 507 total rows shown)       
+         
+iv. Provide the SQL code you used to create your final dataset:
+
+SELECT b.id
+	, b.name
+	, b.city
+	, b.stars
+	, r.text
+FROM business AS b
+INNER JOIN review as r
+ON b.id = r.business_id
+GROUP BY b.id
